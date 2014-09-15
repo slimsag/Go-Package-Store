@@ -20,8 +20,11 @@ import (
 	"github.com/shurcooL/go/gists/gist7480523"
 	"github.com/shurcooL/go/gists/gist7651991"
 	"github.com/shurcooL/go/gists/gist7802150"
+	"github.com/shurcooL/go/gopherjs_http"
 	"github.com/shurcooL/go/u/u4"
 	"github.com/shurcooL/gostatus/status"
+
+	//_ "github.com/shurcooL/Go-Package-Store/assets" // Needed for go get to get its dependencies.
 )
 
 func CommonHat(w http.ResponseWriter) {
@@ -32,7 +35,7 @@ func CommonHat(w http.ResponseWriter) {
 	<head>
 		<title>Go Package Store</title>
 		<link href="assets/style.css" rel="stylesheet" type="text/css" />
-		<script src="assets/script.js" type="text/javascript"></script>
+		<script src="assets/script.go" type="text/javascript"></script>
 	</head>
 	<body>
 		<div style="width: 100%; text-align: center; background-color: hsl(209, 51%, 92%); border-bottom: 1px solid hsl(209, 51%, 88%);">
@@ -335,6 +338,7 @@ func main() {
 	http.HandleFunc("/-/update", updateHandler)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	http.Handle("/assets/", http.FileServer(http.Dir(".")))
+	http.Handle("/assets/script.go", gopherjs_http.GoFiles("./assets/script.go"))
 	http.Handle("/opened", websocket.Handler(openedHandler)) // Exit server when client tab is closed.
 	go updateWorker()
 
