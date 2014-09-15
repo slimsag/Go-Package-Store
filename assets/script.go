@@ -1,4 +1,4 @@
-package script
+package main
 
 import (
 	"github.com/gopherjs/gopherjs/js"
@@ -50,7 +50,7 @@ func UpdateGoPackage(importPathPattern string) {
 		installed_updates := document.GetElementByID("installed_updates").(dom.HTMLElement)
 		installed_updates.Style().SetProperty("display", "", "")
 		installed_updates.ParentNode().InsertBefore(go_package, installed_updates.NextSibling()) // Insert after.
-	}() //gopherjs:blocking
+	}()
 }
 
 func main() {
