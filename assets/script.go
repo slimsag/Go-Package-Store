@@ -32,7 +32,7 @@ func UpdateGoPackage(importPathPattern string) {
 	go_package_button.Class().Add("disabled")
 
 	go func() {
-		req := xhr.NewRequest("POST", "http://localhost:7043/-/update")
+		req := xhr.NewRequest("POST", "/-/update")
 		req.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded")
 		err := req.Send("import_path_pattern=" + importPathPattern)
 		if err != nil {
