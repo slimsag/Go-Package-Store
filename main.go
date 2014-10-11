@@ -35,7 +35,7 @@ func CommonHat(w http.ResponseWriter) {
 	<head>
 		<title>Go Package Store</title>
 		<link href="assets/style.css" rel="stylesheet" type="text/css" />
-		<script src="assets/script.go" type="text/javascript"></script>
+		<script src="assets/script.go.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div style="width: 100%; text-align: center; background-color: hsl(209, 51%, 92%); border-bottom: 1px solid hsl(209, 51%, 88%);">
@@ -338,7 +338,7 @@ func main() {
 	http.HandleFunc("/-/update", updateHandler)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	http.Handle("/assets/", http.FileServer(http.Dir(".")))
-	http.Handle("/assets/script.go", gopherjs_http.GoFiles("./assets/script.go"))
+	http.Handle("/assets/script.go.js", gopherjs_http.GoFiles("./assets/script.go"))
 	http.Handle("/opened", websocket.Handler(openedHandler)) // Exit server when client tab is closed.
 	go updateWorker()
 
