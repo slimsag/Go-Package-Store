@@ -3,6 +3,7 @@ package vcomponent
 import (
 	"bytes"
 	"fmt"
+	"time"
 
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gopherjs/vecty"
@@ -133,24 +134,26 @@ type PresentationChanges struct {
 	*model.RepoPresentation // Only uses Changes, and if len(Changes) == 0, then LocalRevision and RemoteRevision.
 }
 
-// Restore is called when the component should restore itself against a
-// previous instance of a component. The previous component may be nil or
-// of a different type than this Restorer itself, thus a type assertion
-// should be used.
-//
-// If skip = true is returned, restoration of this component's body is
-// skipped. That is, the component is not rerendered. If the component can
-// prove when Restore is called that the HTML rendered by Component.Render
-// would not change, true should be returned.
-func (p *PresentationChanges) Restore(prev vecty.Component) (skip bool) {
-	fmt.Print("Restore: ")
+func (p *PresentationChanges) Restore(prev vecty.Component) {
+	if prev == nil {
+		// Component has just been mounted; Spawn a goroutine which invokes
+		// Rerender every 1s to demonstrate that SkipRender really does work.
+		go func() {
+			for {
+				time.Sleep(1 * time.Second)
+				vecty.Rerender(p)
+			}
+		}()
+	}
+}
+
+// SkipRender implements the vecty.RenderSkipper interface.
+func (p *PresentationChanges) SkipRender(prev vecty.Component) bool {
 	old, ok := prev.(*PresentationChanges)
 	if !ok {
-		fmt.Println("not *PresentationChanges")
 		return false
 	}
-	fmt.Println("old.RepoPresentation == p.RepoPresentation:", old.RepoPresentation == p.RepoPresentation)
-	//return false
+	fmt.Println("SkipRender: old.RepoPresentation == p.RepoPresentation:", old.RepoPresentation == p.RepoPresentation)
 	return old.RepoPresentation == p.RepoPresentation
 }
 
